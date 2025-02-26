@@ -5,10 +5,12 @@ services:
   app:    # name of our "app" directory as 'service'
     build:
       context: .    # context uses the current directory 
+      args:         # Define build-time argument for the environment setting (e.g., development mode)
+        - DEV=true
     ports:
       - "8000:8000" # maps loacl 8000 to docker 8000 port
     volumes:
       - ./app:/app  # by using volumes, it syncs local 'app' directory with the container, ensuring changes in local files reflect in the container instantly.
-    command: >    # Starts the Django development server, making it accessible on all network interfaces at port 8080.
-      sh -c "python manage.py runserver 0.0.0.0:8080"
+    command: >    # Starts the Django development server, making it accessible on all network interfaces at port 8000.
+      sh -c "python manage.py runserver 0.0.0.0:8000"
 

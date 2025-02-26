@@ -6,6 +6,9 @@ ENV PYTHONUNBUFFERED 1
 
 # Copy dependencies file from local development to  Docker container
 COPY ./requirements.txt /tmp/requirements.txt
+# also copying the dependencies needed only for dev mode
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+
 # Copy the application source code into the container
 COPY ./app /app
 
@@ -42,9 +45,17 @@ EXPOSE 8000
 # → Creates a non-root user `django-user` without a password and home directory.
 # Running the application as a non-root user improves security by limiting access in case of a system hack.
 
+
+# Here, only if the $DEV = "true", then we also run the "/py/bin/pip install -r requirements.dev.txt" command conditionally (uning shell command)
+
+ARG DEV=false
+
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
+    if [ $DEV = "true" ]; \
+        then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
+    fi && \
     rm -rf /tmp && \
     adduser \
         --disabled-password \
