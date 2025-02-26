@@ -22,8 +22,8 @@ jobs:
 
       # to perform our custom checks, se set it to run our test.py file
       - name: Test
-        run: docker-compose run --rm app sh -c "python manage.py test"
+        run: docker compose run --rm app sh -c "python manage.py test"
       
       # to implement the flake8 file for linting purpose
       - name: Lint   
-        run: docker-compose run --rm app sh -c "flake8"
+        run: docker compose run --rm app sh -c "flake8"
